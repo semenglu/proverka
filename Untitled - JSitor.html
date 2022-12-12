@@ -1,0 +1,184 @@
+<!doctype html><html><head><style type="text/css">html,
+body {
+  background-color: #000000;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#line {
+  font-size: 30px;
+  color: #000000;
+}
+.container {
+  flex: 1 0 auto;
+}
+.footer {
+  color: #000000;
+}</style></head><body><!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Главная</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+		integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+	<link rel="stylesheet" href="style.css" />
+	<script src="kalkul.js" defer></script>
+</head>
+
+<body>
+	<header>
+		<div class="container-fluid page" style="background-color: #a7b8">
+			<div class="container">
+				<div class="row">
+					<div class="col-5 offset-5 col-md-4 offset-md-1 order-2">
+						<div class="h-100 py-3">
+							<div id="line">
+								<a>Калькулятор стоимости</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-1 col-md-4 order-1">
+						<div class="h-100 py-3">
+							<div id="logo">
+								<img
+                  src="https://i.gifer.com/SsQa.gif"
+                  width="100"
+                  height="100"
+                  alt="name"
+                />
+              </div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+	</header>
+
+	<body>
+		<div class="container">
+			<hr />
+			<div class="row mt-3 order-2 order-sm-3" style="background-color: #a7b8">
+				<div class="col-6 col-md-6">
+					Введите кол-во товара:
+					<p><input type="text" id = "p" value="" placeholder="Количество" onKeyPress="cislo()"></p>
+						Выберете товары:
+						<form>
+
+							<select name="prodType">
+              <option value="1">Телевизоры</option>
+              <option value="2">Компьютерная техника</option>
+              <option value="3">Игровые приставки</option>
+            </select>
+							<div id="radios">
+								<label><input type="radio" name="prodOptions" value="option1"> Клавиатура</label>
+								<label><input type="radio" name="prodOptions" value="option2"> Игровая Мышь</label>
+								<label><input type="radio" name="prodOptions" value="option3"> Наушники</label>
+							</div>
+							<div id="checkboxes">
+								<label><input type="checkbox" name="prop1"> С лицензией</label>
+								<label><input type="checkbox" name="prop2"> С геймпадами</labe1l>
+							</div>
+						</form>
+						<div id="prodPrice"></div>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid page mt-3" style="background-color: #a7b8">
+			<footer class="footer" id="foot">
+				<h5>(с) Глуховский Семён 2022</h5>
+			</footer>
+		</div>
+	</body>
+
+</html><script type="text/javascript">function proiz() {
+  let f = document.getElementById('p');
+  f.addEventListener('input', function () { proiz(); });
+  let s = document.getElementsByName("prodType");
+  let select = s[0];
+  let price = 0;
+  let prices = getPrices();
+  let priceIndex = parseInt(select.value) - 1;
+  if (priceIndex >= 0) {
+    price = prices.prodTypes[priceIndex];
+  }
+  let radioDiv = document.getElementById("radios");
+  radioDiv.style.display = select.value == "2" ? "block" : "none";
+  let radios = document.getElementsByName("prodOptions");
+  radios.forEach(function (radio) {
+    if (radio.checked) {
+      let optionPrice = prices.prodOptions[radio.value];
+      if (optionPrice !== undefined) {
+        price += optionPrice;
+      }
+    }
+  });
+  let checkDiv = document.getElementById("checkboxes");
+  checkDiv.style.display = select.value == "3" ? "block" : "none";
+  let checkboxes = document.querySelectorAll("#checkboxes input");
+  checkboxes.forEach(function (checkbox) {
+    if (checkbox.checked) {
+      let propPrice = prices.prodProperties[checkbox.name];
+      if (propPrice !== undefined) {
+        price += propPrice;
+      }
+    }
+  });
+  let f2 = document.getElementById('p').value;
+  s[0].addEventListener('change', function (event) {
+    if (select.value === '1') {
+
+      document.getElementById('prodPrice').innerHTML =
+        'Цена: ' + prices.prodTypes[0] * f2 + ' рублей';
+    }
+    else if (select.value === '2') {
+      document.getElementById('prodPrice').innerHTML =
+        'Цена: ' + prices.prodTypes[1] * f2 + ' рублей.';
+    }
+    else if (select.value === '3') {
+      document.getElementById('prodPrice').innerHTML =
+        'Цена: ' + prices.prodTypes[2] * f2 + ' рублей.';
+    }
+  });
+  let price_pr = document.getElementById('prodPrice');
+  price_pr.innerHTML = 'Цена: ' + price * f2 + ' рублей.';
+}
+function getPrices() {
+  return {
+    prodTypes: [49000, 3000, 18000],
+    prodOptions: {
+      option2: 500,
+      option3: 3999,
+    },
+    prodProperties: {
+      prop1: 1500,
+      prop2: 3000,
+    },
+  };
+}
+window.addEventListener("DOMContentLoaded", function (event) {
+  console.log("DOM fully loaded and parsed");
+  let s = document.getElementsByName("prodType");
+  let select = s[0];
+  select.addEventListener("change", function (event) {
+    proiz();
+  });
+  let radios = document.getElementsByName("prodOptions");
+  radios.forEach(function (radio) {
+    radio.addEventListener("change", function (event) {
+      proiz();
+    });
+  });
+  let checkboxes = document.querySelectorAll("#checkboxes input");
+  checkboxes.forEach(function (checkbox) {
+    checkbox.addEventListener("change", function () {
+      proiz();
+    });
+  });
+  proiz();
+});
+function cislo() {
+  if (event.keyCode < 48 || event.keyCode > 57)
+    event.returnValue = false;
+}</script></body><html>
